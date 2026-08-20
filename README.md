@@ -6,9 +6,9 @@ parallel computing, GPU architecture, and performance engineering.
 
 ## Current milestone
 
-Milestone 0.2 adds a focused compiler-optimization experiment to the C++
-project foundation. The project does not yet contain tensor operations, CUDA
-code, or third-party dependencies.
+Milestone 1.1 introduces an owning contiguous CPU byte-storage primitive. The
+project does not yet contain Tensor, dtype, shape, CUDA, or third-party library
+functionality.
 
 ## Build
 
@@ -41,6 +41,16 @@ or `build/relwithdebinfo` directory. Add `.exe` when running on Windows.
 
 The Debug preset enables AddressSanitizer and UndefinedBehaviorSanitizer with
 GCC or Clang. Release and RelWithDebInfo disable sanitizers.
+
+## Tests
+
+Configure and build Debug, then run the registered tests:
+
+```sh
+cmake --preset debug
+cmake --build --preset debug
+ctest --test-dir build/debug --output-on-failure
+```
 
 ## Compiler-optimization experiment
 

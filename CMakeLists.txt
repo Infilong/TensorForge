@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.20)
 
 project(TensorForge VERSION 0.1.0 LANGUAGES CXX)
 
+include(CTest)
+
 option(TENSORFORGE_ENABLE_SANITIZERS
     "Enable AddressSanitizer and UndefinedBehaviorSanitizer"
     OFF
@@ -44,6 +46,14 @@ function(tensorforge_configure_target target_name)
     endif()
 endfunction()
 
+add_library(tensorforge_core
+    src/cpu_storage.cpp
+)
+target_include_directories(tensorforge_core PUBLIC
+    "${PROJECT_SOURCE_DIR}/include"
+)
+tensorforge_configure_target(tensorforge_core)
+
 add_executable(tensorforge
     src/main.cpp
 )
@@ -56,3 +66,18 @@ add_executable(tensorforge_compiler_optimization
     experiments/compiler_optimization.cpp
 )
 tensorforge_configure_target(tensorforge_compiler_optimization)
+
+if(BUILD_TESTING)
+    add_executable(tensorforge_cpu_storage_tests
+        tests/cpu_storage_tests.cpp
+    )
+    target_link_libraries(tensorforge_cpu_storage_tests PRIVATE
+        tensorforge_core
+    )
+    tensorforge_configure_target(tensorforge_cpu_storage_tests)
+
+    add_test(
+        NAME cpu_storage
+        COMMAND tensorforge_cpu_storage_tests
+    )
+endif()
